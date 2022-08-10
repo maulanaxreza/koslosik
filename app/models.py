@@ -34,6 +34,7 @@ class penyewaan(models.Model):
     idkamar = models.OneToOneField(kamar,on_delete=models.CASCADE)
     tanggalsewa = models.DateField()
     hargasewa = models.IntegerField()
+    ischeckout = models.BooleanField(default='False')
 
     def __str__(self):
         return str(self.idpelanggan) 

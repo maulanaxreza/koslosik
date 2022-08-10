@@ -10,8 +10,14 @@ urlpatterns = [
     path('pelanggan',views.pelanggan,name='pelanggan'),
     path('pelanggan/<str:id>/update',views.updatepelanggan, name="updatepelanggan"),
     path('pelanggan/<str:id>/delete',views.deletepelanggan, name="deletepelanggan"),
+    path('penyewaan',views.penyewaan,name='penyewaan'),
     path('sewa',views.sewa,name='sewa'),
     path('cek',views.cek,name='cek'),
-    path('adddetailcharge',views.inputcharge,name='adddetailcharge')
+    path('adddetailcharge',views.inputcharge,name='adddetailcharge'),
+    path('checkout/<str:id>',views.checkout,name='checkout'),
+    path('detailcharge/<str:id>/view',views.detailcharge,name='detailcharge'),
+    path('laporan',views.laporan,name='laporan'),
+    path('laporanpdf/<str:mulai>/<str:akhir>',views.laporanpdf,name='laporanpdf'),
+    path('pdf',views.pdfgen)
 
 ]

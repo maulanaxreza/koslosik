@@ -299,28 +299,17 @@
                                     <div class="table-responsive">
                                             <form method="post" id="addasisten">
                                                 {% csrf_token %}
+                                               </select>
                                                     <div class="form-group">
-                                                      <label for="jenis">Pelanggan</label>
-                                                      <select name="pelanggan" id="" class="form-control">
-                                                        {% for item in pelanggan %}
-                                                        <option value="{{item.idpelanggan.idpelanggan}}">{{item.idpelanggan}}</option>
-                                                        {% endfor %}
-                                                      </select>
+                                                      <label for="mulai">Mulai</label>
+                                                      <input required type="date" class="form-control" id="mulai"  name="mulai">
                                                     </div>
                                                     <div class="form-group">
-                                                      <label for="charge">Charge</label>
-                                                      <select name="charge" id="" class="form-control">
-                                                        {% for item in charge %}
-                                                        <option value="{{item.idcharge}}">{{item.jenischarge}}</option>
-                                                        {% endfor %}
-                                                      </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                      <label for="item">Jumlah item</label>
-                                                      <input required type="number" class="form-control" id="jumlah" placeholder="jumlah" name="jumlah">
+                                                      <label for="akhir">Akhir</label>
+                                                      <input required type="date" class="form-control" id="akhir" name="akhir">
                                                     </div>
                                                     
-                                                <button type="submit" class="btn btn-primary" >Add Jenis Kamar</button>
+                                                <button type="submit" class="btn btn-primary" >Generate laporan</button>
                                             </form>
                                     </div>
                                     
@@ -334,33 +323,6 @@
         </div>
         <!-- /. PAGE WRAPPER  -->
     </div>
-    <div class="modal fade" id="updatepemesanan" tabindex="0" role="dialog" aria-labelledby="updatepemesanan" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="updatepemesanan">Update Pemesanan</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <form method="post" id="addasisten">
-            <div class="modal-body">
-                    <div class="form-group">
-                        <label for="pemesanan">Id Pemesanan</label>
-                        <select name="pemesanan" id="" class="form-control" onchange="form.submit()">
-                            <option value="" selected disabled>Pilih ID Pemesanan</option>
-                            {% for item in pemesanan %}s
-                            <option value="{{item.idpemesanan}}" a>{{item.idpemesanan}}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                </div>
-
-            </form>
-          </div>
-        </div>
-      </div>
       <!-- ADD MODAL -->
     <!-- /. WRAPPER  -->
     <!-- JS Scripts-->

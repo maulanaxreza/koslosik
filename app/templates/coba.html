@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+  border-collapse: collapse;
+}
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>IDPenyewaan</th>
+                <th>Pelanggan</th>
+                <th>Kamar</th>
+                <th>Tanggal sewa</th>
+                <th>Harga sewa</th>
+                <th>Charge</th>
+                <th>Harga Charge</th>
+                <th>Total</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+                                                    
+            {% for item in detailobjek %}
+            <tr>
+                <td rowspan="{{item.1.count}}" >{{item.0.idpenyewaan}}</td>
+                <td rowspan="{{item.1.count}}"  >{{item.0.idpelanggan}}</td>
+                <td rowspan="{{item.1.count}}"  >{{item.0.idkamar}}</td>
+                <td rowspan="{{item.1.count}}"  >{{item.0.tanggalsewa}}</td>
+                <td rowspan="{{item.1.count}}"  >{{item.0.hargasewa}}</td>
+                <!-- <td> -->
+                {% if item.1|length > 0 %}
+                <td>
+                    
+                    {% for detail in item.1 %}
+                        <h5>{{ detail.idcharge }}</h5>
+                    {% endfor %}
+    
+                </td>
+                <td>
+                    {% for detail in item.1 %}
+                        <h5>{{detail.hargacharge}}</h5>
+                    {% endfor %}
+                </td>
+                {% else %}
+                <td rowspan="{{item.1.count}}">
+                    <h1>HALLO</h1>
+    
+                </td>
+                <td rowspan="{{item.1.count}}" >
+                    
+               
+                    <h5>-</h5>
+                    
+                </td>
+                {% endif %}
+                <td rowspan="{{item.1.count}}">asda</td>
+                <h1>halo</h1>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>    
+</body>
+</html>

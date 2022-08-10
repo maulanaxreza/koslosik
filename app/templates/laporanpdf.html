@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @page{
+            size: 'A4';
+            margin: 2.5cm 1.5cm 3.5cm 1.5cm;
+        }
+        table, td, th {
+            border: 1px solid;
+            text-align: center;
+            }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            }
+    </style>
+</head>
+<body>
+    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+        <thead>
+            <tr>
+                <th>IDPenyewaan</th>
+                <th>Pelanggan</th>
+                <th>Kamar</th>
+                <th>Tanggal sewa</th>
+                <th>Harga sewa</th>
+                <th>Charge</th>
+                <th>Harga Charge</th>
+                <th>Total</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for item in detailobjek %}
+            <tr>
+                <td  >{{item.0.idpenyewaan}}</td>
+                <td   >{{item.0.idpelanggan}}</td>
+                <td   >{{item.0.idkamar}}</td>
+                <td   >{{item.0.tanggalsewa}}</td>
+                <td   >{{item.0.hargasewa}}</td>
+                <!-- <td> -->
+                {% if item.1|length > 0 %}
+                <td>
+                    
+                    {% for detail in item.1 %}
+                        <p>{{ detail.idcharge }}</p>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for detail in item.1 %}
+                        <p>{{detail.hargacharge}}</p>
+                    {% endfor %}
+                    
+                </td>
+                {% elif item.1|length == 0 %}
+                <td >
+                    <p>-</p>
+                </td>
+                <td  >
+                    <p>-</p>
+                </td>
+                {% endif %}
+                <td >
+                    {{item.2}}
+                </td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+    
+</body>
+</html>
