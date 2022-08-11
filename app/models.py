@@ -31,10 +31,9 @@ class charge(models.Model):
 class penyewaan(models.Model):
     idpenyewaan = models.CharField(primary_key=True, max_length=5)
     idpelanggan = models.ForeignKey(pelanggan,on_delete=models.CASCADE)
-    idkamar = models.OneToOneField(kamar,on_delete=models.CASCADE)
+    idkamar = models.ForeignKey(kamar,on_delete=models.CASCADE)
     tanggalsewa = models.DateField()
     hargasewa = models.IntegerField()
-    ischeckout = models.BooleanField(default='False')
 
     def __str__(self):
         return str(self.idpelanggan) 

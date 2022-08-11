@@ -26,7 +26,8 @@ def dashboard(request):
     kamartersediapi = models.kamar.objects.filter(status = False, jenis = "perempuan").count()
     # Total Pemesanan  
     totalpesan = models.penyewaan.objects.all().count()
-    # Total tambah charge
+    # Total charge
+    totalcharge = models.charge.objects.all().count()
 
 
 
@@ -34,6 +35,7 @@ def dashboard(request):
         'kamartersediapa' : kamartersediapa,
         'kamarterserdiapi' : kamartersediapi,
         'totalpemesanan' : totalpesan,
+        'totalcharge' : totalcharge,
 
     })
 
@@ -191,9 +193,19 @@ def sewa(request):
 
 def cek(request):
     # get active penyewaan object
-    activeobj = models.penyewaan.objects.filter(ischeckout = "False")
+    activeobj = models.kamar.objects.filter(status = "True")
+    print(activeobj)
+    data=[]
+    
+    for item in activeobj:
+        selected = models.penyewaan.objects.filter(idkamar = item ).last()
+        if selected:
+            data.append(selected)
+        else:
+            continue
+    print(data)
     return render(request,'cek.html',{
-        'objek' : activeobj
+        'objek' : data
     })
 
 def checkout(request,id):
@@ -201,28 +213,32 @@ def checkout(request,id):
     penyewaanobj = models.penyewaan.objects.get(idpenyewaan = id)
 
     # update status penyewaan
-    penyewaanobj.ischeckout = "True"
 
     # get selected kamar object
     kamarobj = models.kamar.objects.get(idkamar = penyewaanobj.idkamar.idkamar)
-
+    print(kamarobj)
     # update status kamar
 
     kamarobj.status = 'False'
-    penyewaanobj.save()
     kamarobj.save()
-
-    
     return redirect('dashboard')
 
 def inputcharge(request):
+    data=[]
     # Get pelanggan object
-    pelangganobj = models.penyewaan.objects.filter(ischeckout = "False" )
+    activeobj = models.kamar.objects.filter(status = "True")
+    for item in activeobj:
+        selected = models.penyewaan.objects.filter(idkamar = item ).last()
+        if selected:
+            data.append(selected)
+        else:
+            pass
+    print(data)
     # Get Charge object
     chargeobj = models.charge.objects.all()
     if request.method == "GET":
         return render(request,'adddetailcharge.html',{
-            'pelanggan':pelangganobj,
+            'pelanggan':data,
             'charge' : chargeobj
         })
     elif request.method == "POST":
@@ -275,25 +291,31 @@ def laporan(request):
             data.append(detailchargeobj)
             totalcharge=detailchargeobj.aggregate(Sum('hargacharge'))
             biayasewa = item.hargasewa
-            print(totalcharge)
             if totalcharge['hargacharge__sum'] == None:
                 total = biayasewa
             else:
                 total = totalcharge['hargacharge__sum']+biayasewa
             data.append(total)
             detailobj.append(data)
+            total += total
+    
+        pemasukan = []
+        for harga in detailobj:
+            pemasukan.append(harga[2])
+        totalpemasukan = sum(pemasukan)
 
         return render(request,'detaillaporan.html',{
             'detailobjek' :detailobj,
             'tanggalmulai' : mulai,
-            'tanggalakhir' : akhir
+            'tanggalakhir' : akhir,
+            'pemasukan' : totalpemasukan
+
         })
 
 def laporanpdf(request,mulai,akhir):
 
     detailobj =[]
-        # Get selected penyewaan object
-
+    # Get selected penyewaan object
     penyewaanobj = models.penyewaan.objects.filter(tanggalsewa__range=(mulai,akhir))
     for item in penyewaanobj:
         data=[]
@@ -311,12 +333,23 @@ def laporanpdf(request,mulai,akhir):
         data.append(total)
         detailobj.append(data)
     
+    pemasukan = []
+    for harga in detailobj:
+        pemasukan.append(harga[2])
+    totalpemasukan = sum(pemasukan)
+
+    totaltransaksi = penyewaanobj.count()
+    
     response = HttpResponse(content_type='application/pdf;')
     response['Content-Disposition'] = 'inline; filename=list_of_students.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
     html_string = render_to_string(
         'laporanpdf.html',{
             'detailobjek' : detailobj,
+            'pemasukan' : totalpemasukan,
+            'totaltransaksi' : totaltransaksi,
+            'mulai' :mulai,
+            'akhir' : akhir
             })
     html = HTML(string=html_string)
     result = html.write_pdf()
@@ -327,10 +360,51 @@ def laporanpdf(request,mulai,akhir):
         output.seek(0)
         response.write(output.read())
     
-    render(request,'coba.html')
+    render(request,'laporanpdf.html')
     
     return response
 
+def notapdf(request,id):
+    # Get selected object 
+    pelangganobj = models.pelanggan.objects.get(idpelanggan = id)
+    # Get Detail penyewaan
+    penyewaanobj = models.penyewaan.objects.get(idpelanggan = id)
+    # Get detail charge
+    detailchargeobj = models.detailcharge.objects.filter(idpelanggan = id)
+    # total charge
+    totalcharge = detailchargeobj.aggregate(Sum('hargacharge'))
+    totalcharge = totalcharge['hargacharge__sum']
+    if totalcharge is not None : 
+        grandtotal = int(totalcharge)+int(penyewaanobj.hargasewa)
+    else :
+        grandtotal = int(penyewaanobj.hargasewa)
+    
+    print(pelangganobj)
+    print(penyewaanobj)
+    print(detailchargeobj)
+    response = HttpResponse(content_type='application/pdf;')
+    response['Content-Disposition'] = 'inline; filename=list_of_students.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+    html_string = render_to_string(
+        'notapdf.html',{
+            'pelanggan' : pelangganobj,
+            'penyewaan' : penyewaanobj,
+            'detailcharge' : detailchargeobj,
+            'totalcharge' : totalcharge,
+            'grandtotal' : grandtotal
+            
+            }
+    )
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        output.seek(0)
+        response.write(output.read())
+    
+    return response
 def pdfgen(request):
 
     # GET pelanggan

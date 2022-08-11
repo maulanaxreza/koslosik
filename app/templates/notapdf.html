@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @page{
+            size: A5;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Nota Pemesanan</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td>Nama</td>
+                <td>: {{ pelanggan.nama}}</td>
+            </tr>
+            <tr>
+                <td>Nomor HP</td>
+                <td>: {{ pelanggan.nohp}}</td>
+            </tr>
+            <tr>
+                <td>Nomor Kamar</td>
+                <td>: {{penyewaan.idkamar.nokamar}}</td>
+            </tr>
+            <tr>
+                <td>Tanggal Sewa</td>
+                <td>: {{penyewaan.tanggalsewa}}</td>
+            </tr>
+            {% if detailcharge|length == 0 %}
+            <tr>
+                <td>Harga Sewa</td>
+                <td>: {{penyewaan.hargasewa}}</td>
+            </tr>
+            <tr>
+                <td>Grand Total</td>
+                <td>: {{grandtotal}}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <th>ID Charge</th>
+                <th>Charge</th>
+                <th>Jumlah</th>
+                <th>Biaya</th>
+            </tr>
+            {% for item in detailcharge %}
+            <tr>
+                <td>{{item.iddetailcharge}}</td>
+                <td>{{item.idcharge}}</td>
+                <td>{{item.jumlahitemcharge}}</td>
+                <td>{{item.hargacharge}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>Total Charge</td>
+                <td colspan="3" style="text-align:end;"> {{totalcharge}}</td>
+            </tr>
+            <tr>
+                <td>Harga Sewa</td>
+                <td colspan="3" style="text-align:end ;">{{penyewaan.hargasewa}}</td>
+            </tr>
+            <tr>
+                <td>Grand Total</td>
+                <td colspan="3" style="text-align:end ;">{{grandtotal}}</td>
+            </tr>
+            {% endif %}
+            
+            
+        </tbody>
+        </table>
+</body>
+</html>

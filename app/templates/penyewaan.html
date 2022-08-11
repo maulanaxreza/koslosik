@@ -278,11 +278,7 @@
                         <h1 class="page-header">
                             Dashboard <small>Summary of your App</small>
                         </h1>
-						<ol class="breadcrumb">
-					  <li><a href="#">Home</a></li>
-					  <li><a href="#">Library</a></li>
-					  <li class="active">Data</li>
-					</ol> 
+
 									
 		</div>
             <div id="page-inner">
@@ -320,6 +316,9 @@
                                                     <td>
                                                         <button class="btn btn-warning" type="button" >
                                                             <a href="{% url 'detailcharge' item.idpelanggan.idpelanggan %}">Detail Charge</a>
+                                                        </button>
+                                                        <button class="btn btn-success" type="button" >
+                                                            <a href="{% url 'notapdf' item.idpelanggan.idpelanggan %}">Cetak Nota</a>
                                                         </button>
                                                     </td>
                                                 </tr>

@@ -18,6 +18,7 @@ urlpatterns = [
     path('detailcharge/<str:id>/view',views.detailcharge,name='detailcharge'),
     path('laporan',views.laporan,name='laporan'),
     path('laporanpdf/<str:mulai>/<str:akhir>',views.laporanpdf,name='laporanpdf'),
+    path('notapdf/<str:id>/',views.notapdf,name='notapdf'),
     path('pdf',views.pdfgen)
 
 ]
