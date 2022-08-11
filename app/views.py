@@ -3,15 +3,11 @@ from unittest import result
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from . import models
-
-# pdfgen
 from django.template.loader import render_to_string
 import tempfile
 from django.db.models import Sum
 import os
-
 from weasyprint import HTML
-
 
 
 # Create your views here.
