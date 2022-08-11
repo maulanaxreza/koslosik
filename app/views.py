@@ -3,9 +3,6 @@ from unittest import result
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from . import models
-import io
-from django.http import FileResponse
-from reportlab.pdfgen import canvas
 
 # pdfgen
 from django.template.loader import render_to_string
