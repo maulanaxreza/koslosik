@@ -50,7 +50,6 @@ def addcharge(request):
     if request.method == "GET":
         return render(request,'addcharge.html')
     elif request.method == "POST":
-        print(request.POST)
         # get total objek charge
         total = models.charge.objects.all().count()
         totallen = len(str(total))
@@ -58,7 +57,6 @@ def addcharge(request):
             idcharge = 'crg0'+str(total+1)
         else:
             idcharge = 'crg'+str(total+1)
-        print(idcharge)
         namacharge = request.POST['nama']
         harga = request.POST['harga']
         # make new charge object
@@ -93,7 +91,6 @@ def updatepelanggan(request,id):
             'tanggal' :tanggal
         })
     elif request.method == "POST":
-        print(request.POST)
         nama = request.POST['nama']
         jeniskelamin = request.POST['jeniskelamin']
         tanggallahir = request.POST['tanggallahir']
@@ -120,7 +117,6 @@ def sewa(request):
         })
     elif request.method == "POST":
 
-        print(request.POST)
         # add pelanggan to database
         namapelanggan = request.POST['namapelanggan']
         jeniskelamin = request.POST['jeniskelamin']
@@ -133,7 +129,6 @@ def sewa(request):
             idpelanggan = 'crg0'+str(total+1)
         else:
             idpelanggan = 'crg'+str(total+1)
-        print(idpelanggan)
         newpelanggan = models.pelanggan(
             idpelanggan = idpelanggan,
             nama = namapelanggan,
@@ -145,7 +140,6 @@ def sewa(request):
 
         # Get object pelanggan
         pelangganobj = models.pelanggan.objects.get(idpelanggan = idpelanggan)
-        print(pelangganobj.nama)
 
         # Get object kamar
         kamar = request.POST['kamar']
@@ -169,7 +163,6 @@ def sewa(request):
             idpenyewaan = 'crg0'+str(total+1)
         else:
             idpenyewaan = 'crg'+str(total+1)
-        print(idpenyewaan)
         
         # add pemesanan to database
         new_penyewaan = models.penyewaan(
@@ -187,7 +180,6 @@ def sewa(request):
 def cek(request):
     # get active penyewaan object
     activeobj = models.kamar.objects.filter(status = "True")
-    print(activeobj)
     data=[]
     
     for item in activeobj:
@@ -196,7 +188,6 @@ def cek(request):
             data.append(selected)
         else:
             continue
-    print(data)
     return render(request,'cek.html',{
         'objek' : data
     })
@@ -209,7 +200,6 @@ def checkout(request,id):
 
     # get selected kamar object
     kamarobj = models.kamar.objects.get(idkamar = penyewaanobj.idkamar.idkamar)
-    print(kamarobj)
     # update status kamar
 
     kamarobj.status = 'False'
@@ -226,7 +216,6 @@ def inputcharge(request):
             data.append(selected)
         else:
             pass
-    print(data)
     # Get Charge object
     chargeobj = models.charge.objects.all()
     if request.method == "GET":
@@ -235,7 +224,6 @@ def inputcharge(request):
             'charge' : chargeobj
         })
     elif request.method == "POST":
-        print(request.POST)
         # generate id detail charge
         total = models.detailcharge.objects.all().count()
         totallen = len(str(total))
@@ -261,7 +249,6 @@ def inputcharge(request):
 
 def detailcharge(request,id):
     # Get selected detailcharge
-    print(id)
     detailchargeobj = models.detailcharge.objects.filter(idpelanggan = id)
     return render(request,'detailcharge.html',{
         'detailcharge':detailchargeobj
@@ -318,7 +305,6 @@ def laporanpdf(request,mulai,akhir):
         data.append(detailchargeobj)
         totalcharge=detailchargeobj.aggregate(Sum('hargacharge'))
         biayasewa = item.hargasewa
-        print(totalcharge)
         if totalcharge['hargacharge__sum'] == None:
             total = biayasewa
         else:
@@ -371,10 +357,7 @@ def notapdf(request,id):
         grandtotal = int(totalcharge)+int(penyewaanobj.hargasewa)
     else :
         grandtotal = int(penyewaanobj.hargasewa)
-    
-    print(pelangganobj)
-    print(penyewaanobj)
-    print(detailchargeobj)
+
     response = HttpResponse(content_type='application/pdf;')
     response['Content-Disposition'] = 'inline; filename=list_of_students.pdf'
     response['Content-Transfer-Encoding'] = 'binary'
